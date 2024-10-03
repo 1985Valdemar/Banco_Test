@@ -1,6 +1,39 @@
 # Banco_Test
 Testando Banco com DBeaver realizando Pesquisa
 
+## Buscando dados e otimizando pesquisa implementando Prazo_entrega
+![Captura de tela 2024-10-03 162303](https://github.com/user-attachments/assets/4f17081d-2814-4195-8408-68bb1bcafb69)
+
+## Buscando dados e otimizando pesquisa implementando Prazo_entrega
+
+```python
+
+SELECT 
+    Emprestimos.emprestimo_id,  -- Seleciona o ID do empréstimo da tabela 'Emprestimos'
+    Emprestimos.estado,         -- Seleciona o estado do empréstimo (por exemplo, 'Pendente', 'Concluído')
+    Emprestimos.data_emprestimo,  -- Seleciona a data em que o empréstimo foi realizado
+    DATE(Emprestimos.data_emprestimo, '+5 days') AS prazo_entrega,  -- Calcula a data de entrega somando 5 dias à data do empréstimo
+    Usuarios.nome AS nome_usuario,  -- Seleciona o nome do usuário que fez o empréstimo, renomeando a coluna como 'nome_usuario'
+    Livros.titulo,                 -- Seleciona o título do livro que foi emprestado
+    Livros.valor AS valor_unitario,  -- Seleciona o valor do livro, renomeando a coluna como 'valor_unitario'
+    Livros.quantidade AS quantidade_livro,  -- Seleciona a quantidade de exemplares do livro, renomeando como 'quantidade_livro'
+    (Livros.valor * Livros.quantidade) AS total_valor  -- Calcula o valor total (valor do livro multiplicado pela quantidade)
+FROM 
+    Livros  -- Tabela de livros que contém os detalhes dos livros emprestados
+JOIN 
+    Emprestimos ON Livros.livro_id = Emprestimos.usuario_id  -- Realiza uma junção entre a tabela 'Livros' e 'Emprestimos' com base em 'livro_id' (esta linha parece ter um erro, deveria ser `Emprestimos.livro_id`)
+JOIN 
+    Usuarios ON Emprestimos.usuario_id = Usuarios.usuario_id  -- Realiza uma junção entre 'Emprestimos' e 'Usuarios' para obter os dados do usuário que fez o empréstimo
+WHERE 
+    Emprestimos.estado = 'Pendente'  -- Filtra os empréstimos que estão no estado 'Pendente'
+ORDER BY 
+    Emprestimos.emprestimo_id;  -- Ordena os resultados com base no ID do empréstimo em ordem crescente
+
+
+```
+
+
+
 ```python
 import sqlite3
 
